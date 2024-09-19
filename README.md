@@ -1,2 +1,2 @@
-# Jeff_PesosTM.github.io
+# Jeff-PesosTM.github.io
  cs30 intro repo
