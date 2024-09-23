@@ -6,6 +6,9 @@ let size = 50;
 let winWidth = 400;
 let winHeight = 400;
 let v;
+let acc = 1;
+let xV = 0;
+let xVMax = 10;
 
 function setup() {
   createCanvas(winWidth, winHeight);
@@ -16,6 +19,14 @@ function draw() {
   background(220);
   bounceBall();
   displayBall();
+  if (keyIsDown(65) === true) && xV <= xVMax {
+    xV += acc;
+    x += xV;
+  } 
+  if (keyIsDown(68) === true) {
+    xV -= acc;
+    x -= xV;
+  } 
 }
 
 function bounceBall() {
@@ -37,22 +48,9 @@ function bounceBall() {
 function keyPressed() {
   if (key === ' ') { // reset when space bar
     y = 50;
-    v = 2 +(1 -y/400);
-    displayBall();
-    console.log('test');
-  }
-  if (keyIsDown(87)){ // change to make ball movement modifier change by acceleration constant for smooth movement
-    y -= 10;
-  } 
-  if (keyIsDown(83)){
-    y += 10;
-  }
-  if (keyIsDown(65)) {
-    x-= 10;
-  } 
-  if (keyIsDown(68)) {
-    x += 10;
-  } 
+    v = 2 +(1 -y/400);;
+  } // change to make ball movement modifier change by acceleration constant for smooth movement
+  
 }
 
 function displayBall() { // displays ball
