@@ -3,6 +3,7 @@
 ## demos
 - [moving square](moving-square)
 - [image demo](image-demo)
+- [traffic light](traffic-light)
 
 
 ## projects
