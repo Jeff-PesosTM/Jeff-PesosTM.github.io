@@ -9,6 +9,7 @@ let v;
 let acc = 1;
 let xV = 0;
 let xVMax = 10;
+let xVMin = -10;
 
 function setup() {
   createCanvas(winWidth, winHeight);
@@ -19,14 +20,17 @@ function draw() {
   background(220);
   bounceBall();
   displayBall();
-  if (keyIsDown(65) === true) && xV <= xVMax {
+  if ((keyIsDown(65)) && xV <= xVMax && (x >= 0 + size/2)) {
+    xV -= acc;
+    x += xV;
+  }
+  else if ((keyIsDown(68) && xV >= xVMin && (x <= width - (size/2) - 1))) {
     xV += acc;
     x += xV;
-  } 
-  if (keyIsDown(68) === true) {
-    xV -= acc;
-    x -= xV;
-  } 
+  }
+  else {
+    xV = xV *0.9;
+  }
 }
 
 function bounceBall() {
