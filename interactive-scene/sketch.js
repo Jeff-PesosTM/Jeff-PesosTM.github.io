@@ -2,7 +2,7 @@
 
 let x = 50;
 let y = 50;
-let size = 50;
+let ballSize = 50;
 let winWidth = 400;
 let winHeight = 400;
 let v;
@@ -19,40 +19,36 @@ function setup() {
 function draw() {
   background(220);
   bounceBall();
+  moveBall();
   displayBall();
-  if ((keyIsDown(65)) && xV <= xVMax && (x >= 0 + size/2)) {
-    xV -= acc;
-    x += xV;
-  }
-  else if ((keyIsDown(68) && xV >= xVMin && (x <= width - (size/2) - 1))) {
-    xV += acc;
-    x += xV;
-  }
-  else {
-    xV = xV *0.9;
-  }
 }
 
 function bounceBall() {
-  if ((y >= height - size) && (v <= 0.1 && v >= -0.1)){ // stop moving
-    y = height - size/2;
+  if (y >= height - ballSize && (v <= 0.1 && v >= -0.1)){ // stop moving
+    y = height - ballSize/2;
     v = 0;
   }
-  else if (y >= height - (size/2) - 1) { // bounce
+  else if (y >= height - ballSize/2 - 1) { // bounce
     v = v * -1;
     v += 2 +(1 -windowHeight/400);
     y += v;
   }
-  if (y <= height - size/2) { // regular gravity
+  if (y <= height - ballSize/2) { // regular gravity
     v += 1 +(1 -windowHeight/400);
     y += v;
+  }
+  if (x > xV + ballSize/2 && x < winWidth-xV - ballSize/2) { // horizontal collision
+    x += xV;
+  }
+  else if (x < xV + ballSize/2){
+    x += 10;
   }
 }
 
 function keyPressed() {
-  if (key === ' ') { // reset when space bar
+  if (key === " ") { // reset when space bar
     y = 50;
-    v = 2 +(1 -y/400);;
+    v = 2 +(1 -y/400);
   } // change to make ball movement modifier change by acceleration constant for smooth movement
   
 }
@@ -60,9 +56,23 @@ function keyPressed() {
 function displayBall() { // displays ball
   noStroke();
   fill(0);
-  circle(x, y, size);
+  circle(x, y, ballSize);
 }
 
 function mouseWheel(event) { // changes ball size when scrolling
-  size += (event.delta/100);
+  ballSize += event.delta/100;
 }
+
+function moveBall() {
+  if (keyIsDown(65)) {
+    xV -= acc;
+  }
+  else if (keyIsDown(68)) {
+    xV += acc;
+  }
+  else {
+    xV = xV *0.9;
+  }
+}
+
+// xV <= xVMax && x >= 0 + ballSize/2 && (xV >= xVMin && x <= width - ballSize/2 - 1)

@@ -4,7 +4,7 @@
 let rTime = 6000;
 let yTime = 2000;
 let gTime = 6000;
-let colourState = 1;
+let colourState = "yellow";
 let lastTime = -2000;
 
 function setup() {
@@ -28,25 +28,25 @@ function drawOutlineOfLights() {
 }
 
 function lightColour() {
-  if (millis() > lastTime + yTime && colourState === 1) { // red
+  if (millis() > lastTime + yTime && colourState === "yellow") { // red
     drawOutlineOfLights();
-    fill(255, 0, 0);
+    colourState = "red";
+    fill(colourState);
     ellipse(width/2, height/2 - 65, 50, 50);
     lastTime = millis();
-    colourState = 2;
   }
-  if (millis() > lastTime + rTime && colourState === 2) { // green
+  if (millis() > lastTime + rTime && colourState === "red") { // green
     drawOutlineOfLights();
-    fill(0, 255, 0);
+    colourState = "green";
+    fill(colourState);
     ellipse(width/2, height/2 + 65, 50, 50);
     lastTime = millis();
-    colourState = 3
   }
-  if (millis() > lastTime + gTime && colourState === 3) { // yellow
+  if (millis() > lastTime + gTime && colourState === "green") { // yellow
     drawOutlineOfLights();
-    fill(255, 255, 0);
+    colourState = "yellow";
+    fill(colourState);
     ellipse(width/2, height/2, 50, 50);
     lastTime = millis();
-    colourState = 1;
   }
 }
