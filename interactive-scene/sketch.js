@@ -37,12 +37,14 @@ function bounceBall() {
     v += 1 +(1 -windowHeight/400);
     y += v;
   }
-  if (x > xV + ballSize/2 && x < winWidth-xV - ballSize/2) { // horizontal collision
-    x += xV;
+  if (x - ballSize / 2 > winWidth) {
+    x = -ballSize / 2;
   }
-  else if (x < xV + ballSize/2){
-    x += 10;
+  if (x + ballSize / 2 < 0) {
+    x = winWidth + ballSize/2;
   }
+  x += xV;
+
 }
 
 function keyPressed() {
@@ -64,7 +66,7 @@ function mouseWheel(event) { // changes ball size when scrolling
 }
 
 function moveBall() {
-  if (keyIsDown(65)) {
+  if (keyIsDown(65) && x - xV > 2) {
     xV -= acc;
   }
   else if (keyIsDown(68)) {
@@ -75,4 +77,5 @@ function moveBall() {
   }
 }
 
+// x > xV + ballSize/2 &&
 // xV <= xVMax && x >= 0 + ballSize/2 && (xV >= xVMin && x <= width - ballSize/2 - 1)
