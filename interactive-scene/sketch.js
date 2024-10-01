@@ -72,7 +72,7 @@ function mouseWheel(event) { // changes ball size when scrolling
 }
 
 function moveBall() {
-  if (keyIsDown(65) && x - xV > 2) {
+  if (keyIsDown(65)) {
     xV -= acc;
   }
   else if (keyIsDown(68)) {
