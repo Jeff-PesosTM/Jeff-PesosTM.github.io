@@ -1,4 +1,6 @@
 // grady's interactve scene
+// click on canvas to bring ball to mouse, use a and d to move left and right. 
+// extra for experts: scroll wheel adjusts ball size
 
 let x = 50;
 let y = 50;
@@ -14,7 +16,7 @@ let playerHealth = 10;
 let playerHurt = false;
 
 let spikeMode;
-let spikeSize  = 50;
+let spikeSize = 50;
 let spikeMax;
 let spikeX;
 let constX;
@@ -26,7 +28,6 @@ function setup() {
   spikeMax = random(5,7);
   spikeX = random(0,25);
   constX = spikeX;
-
 }
 
 function bounceBall() {
@@ -36,12 +37,12 @@ function bounceBall() {
   }
   else if (y >= height - ballSize/2 - 1) { // bounce
     v = v * -1;
-    v += 2 +(1 -windowHeight/400);
-    y += v;
+    v -= 2 +(1 -windowHeight/400);
+    y -= v;
   }
   if (y <= height - ballSize/2) { // regular gravity
     v += 1 +(1 -windowHeight/400);
-    y += v;
+    y -= v;
   }
   if (x - ballSize / 2 > winWidth) {
     x = -ballSize / 2;
@@ -50,21 +51,27 @@ function bounceBall() {
     x = winWidth + ballSize/2;
   }
   x += xV;
-
 }
 
-function keyPressed() {
-  if (key === " ") { // reset when space bar
-    y = 100;
-    v = 2 +(1 -y/400);
-  } // change to make ball movement modifier change by acceleration constant for smooth movement
-  
+function mousePressed() { // mouse click brings ball
+  y = mouseY;
+  x = mouseX;
+  v = 2 +(1 -y/400);
 }
 
 function displayBall() { // displays ball
   noStroke();
-  fill(0);
+  if (playerHurt) {
+    fill(0,255,0);
+  }
+  else {
+    fill(0);
+  }
   circle(x, y, ballSize);
+  if (!playerHurt && y - ballSize < spikeSize + ballSize * (height - ballSize * 2) && y + ballSize / 2 > ballSize * (height - ballSize * 2)) {
+    playerHurt = true;
+    playerHealth--;
+  }
 }
 
 function mouseWheel(event) { // changes ball size when scrolling
@@ -89,15 +96,9 @@ function spikes() {
     fill(255,0,0);
     spikeX = constX * (spikeAmount +1);
     spikeX = spikeX + spikeSize * spikeAmount;
-    triangle(spikeX, 0, spikeX + spikeSize, 0, spikeX + spikeSize/2, spikeSize);
+    triangle(spikeX, winHeight, spikeX + spikeSize, winHeight, spikeX + spikeSize/2, 400-spikeSize);
   }
 }
-
-
-//if (!playerHurt && spikeMode === 2 && y - ballSize < spikeSize + ballSize * (height - ballSize * 2) && y + ballSize / 2 > ballSize * (height - ballSize * 2)) {
-// playerHurt = true;
-// playerHealth--;
-// background(255,0,0);
 
 function draw() {
   background(220);
@@ -105,5 +106,4 @@ function draw() {
   bounceBall();
   moveBall();
   displayBall();
-
 }
