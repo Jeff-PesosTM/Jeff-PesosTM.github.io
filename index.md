@@ -5,6 +5,7 @@
 - [image demo](image-demo)
 - [traffic light](traffic-light)
 - [bouncing balls](bouncing-balls)
+- [generative art](gen-art)
 
 
 ## projects
