@@ -11,3 +11,4 @@
 
 ## projects
 - [interactive scene](interactive-scene)
+- [perlin terrain generation](terrain-gen)
