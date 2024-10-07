@@ -19,13 +19,13 @@ function setup() {
 
 function draw() {
   background(220);
-  if (dist(x, y, mouseX, mouseY)/100 > 10){
-    weight = 2;
-  }
-  else {
-    weight = 1;
-  }
   for (let tile2 of tileArray) {
+    if (dist(tile2.x1, tile2.y1, mouseX, mouseY)/10 < 10){
+      weight = 2;
+    }
+    else {
+      weight = 1;
+    }
     strokeWeight(weight);
     line(tile2.x1, tile2.y1, tile2.x2, tile2.y2);
   }
