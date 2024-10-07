@@ -6,6 +6,7 @@
 - [traffic light](traffic-light)
 - [bouncing balls](bouncing-balls)
 - [generative art](gen-art)
+- [perlin noise ball](perlin)
 
 
 ## projects
