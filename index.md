@@ -12,3 +12,4 @@
 ## projects
 - [interactive scene](interactive-scene)
 - [perlin terrain generation](terrain-gen)
+- [arrays and object notation assignment](array-notation)
