@@ -1,6 +1,4 @@
 // grady's interactve scene
-// click on canvas to bring ball to mouse, use a and d to move left and right. 
-// extra for experts: scroll wheel adjusts ball size
 
 let x = windowWidth/2;
 let y = windowHeight/2;
@@ -13,46 +11,35 @@ let xVMin = -10;
 
 let ballArray = [];
 
+let borderCoords;
+let localDimensions;
+
+let newBall;
+
 let mvmt = { // movement properties
   airResistance: 0.995, // slows down the speed in each frame
   hitResistance: 0.8, // slows down the Y speed when the surface is hitted
   rollingResistance: 0.98, // slows down the X speed when rolling on the ground
   gravity: 0.05, // pulls the ball to the ground in each frame
-  velocityFactor: 0.07 // velocity factor (converts vector from the mouse dragging to this environment)
+  velocityFactor: 0.07 // velocity factor
 };
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   v = 2 +(1 -y/windowHeight);
-}
 
-function bounceBall() { // deprecated
-  if (y >= height - ballSize && (v <= 0.1 && v >= -0.1)){ // stop moving
-    y = height - ballSize/2;
-    v = 0;
-  }
-  else if (y >= height - ballSize/2 - 1) { // bounce
-    v = v * -1;
-    v -= 2 +(1 -windowHeight/windowHeight);
-    y -= v;
-  }
-  if (y <= height - ballSize/2) { // regular gravity
-    v += 1 +(1 -windowHeight/windowHeight);
-    y += v;
-  }
-  if (x - ballSize / 2 > windowWidth) {
-    x = -ballSize / 2;
-  }
-  if (x + ballSize / 2 < 0) {
-    x = windowWidth + ballSize/2;
-  }
-  x += xV;
+  localDimensions = {
+    width: 100, // 1 localDimensions.width is 1 local unit
+    height: 100 * (2/3) // the canvas ratio is always 3:2
+  };
+  spawnBall(50,);
 }
 
 function draw() {
   background(220);
   displayBall();
+  ballPhysics();
 }
 
 function displayBall() {
@@ -75,55 +62,57 @@ function displayBall() {
 
 
 function spawnBall(position, velocity, radius, localDimensions) {
-  this.position = position;
-  this.velocity = velocity;
-  this.radius = radius;
-  this._borderCoords = {
-      top: radius,
-      bottom: localDimensions.height - radius,
-      left: radius,
-      right: localDimensions.width - radius
+  newBall.position = position;
+  newBall.velocity = velocity;
+  newBall.radius = radius;
+  borderCoords = {
+    top: radius,
+    bottom: localDimensions.height - radius,
+    left: radius,
+    right: localDimensions.width - radius
   };
 }
 
 
 function ballPhysics() {
-  if (this.velocity.isNearZero() && this.position.Y == this._borderCoords.bottom && !this.velocity.isZero())
-      this.velocity = Vector2D.zero(); // the ball is staying in place
+  if (newBall.velocity.isNearZero() && newBall.position.Y === borderCoords.bottom && !newBall.velocity.isZero()){
+    newBall.velocity = 0; // the ball is staying in place
+  }
 
   // move the ball using the velocity
-  this.position = this.position.add(this.velocity);
+  newBall.position = newBall.position.add(newBall.velocity);
 
-  if (this.position.X <= this._borderCoords.left || this.position.X >= this._borderCoords.right) {
-      // move ball inside the borders
-      this.position.X = (this.position.X <= this._borderCoords.left) ?
-                          this._borderCoords.left : this._borderCoords.right;
-
-      // reflection
-      this.velocity.X = -this.velocity.X;
+  if (newBall.position.X <= borderCoords.left || newBall.position.X >= borderCoords.right) {
+    // move ball inside the borders
+    newBall.position.X = newBall.position.X <= borderCoords.left ? borderCoords.left : borderCoords.right;
+    // reflection
+    newBall.velocity.X = -newBall.velocity.X;
   }
-  if (this.position.Y <= this._borderCoords.top || this.position.Y >= this._borderCoords.bottom) {
-      // move ball inside the borders
-      this.position.Y = (this.position.Y <= this._borderCoords.top) ?
-                          this._borderCoords.top : this._borderCoords.bottom;
 
-      if (this.position.Y == this._borderCoords.bottom) {
-          // when ball is on the ground, update resistances
-          this.velocity.Y *= mvmt.hitResistance;
-          this.velocity.X *= mvmt.rollingResistance;
-      }
+  if (newBall.position.Y <= borderCoords.top || newBall.position.Y >= borderCoords.bottom) {
+    // move ball inside the borders
+    newBall.position.Y = newBall.position.Y <= borderCoords.top ?
+      borderCoords.top : borderCoords.bottom;
 
-      // reflection
-      this.velocity.Y = -this.velocity.Y;
+    if (newBall.position.Y === borderCoords.bottom) {
+      // when ball is on the ground, update resistances
+      newBall.velocity.Y *= mvmt.hitResistance;
+      newBall.velocity.X *= mvmt.rollingResistance;
+    }
+
+    // reflection
+    newBall.velocity.Y = -newBall.velocity.Y;
   }
 
   // apply air resistance
-  this.velocity = this.velocity.mult(verticalMovementProperties.airResistance);
+  newBall.velocity = newBall.velocity.mult(mvmt.airResistance);
 
-  if (this.position.Y == this._borderCoords.bottom && Math.abs(this.velocity.Y) <= Vector2D.NEAR_ZERO)
-      // the ball isn't falling or jumping
-      this.velocity.Y = 0;
-  else
-      // apply gravity if falling or jumping
-      this.velocity.Y += verticalMovementProperties.gravity;
+  if (newBall.position.Y === borderCoords.bottom && Math.abs(newBall.velocity.Y) <= 0){
+    // the ball isn't falling or jumping
+    newBall.velocity.Y = 0;
+  }
+  else{
+    // apply gravity if falling or jumping
+    newBall.velocity.Y += mvmt.gravity;
+  }
 }
