@@ -1,20 +1,21 @@
 // grady's interactve scene
 
-let x = windowWidth/2;
-let y = windowHeight/2;
+let x;
+let y;
 let ballSize = 50;
-let v;
-let acc = 1;
-let xV = 0;
-let xVMax = 10;
-let xVMin = -10;
 
 let ballArray = [];
 
 let borderCoords;
-let localDimensions;
+let dimensions;
 
 let newBall;
+let pos;
+
+dimensions = {
+  width: 100,
+  height: 100 * (2/3),
+};
 
 let mvmt = { // movement properties
   airResistance: 0.995, // slows down the speed in each frame
@@ -27,19 +28,17 @@ let mvmt = { // movement properties
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  v = 2 +(1 -y/windowHeight);
-
-  localDimensions = {
-    width: 100, // 1 localDimensions.width is 1 local unit
-    height: 100 * (2/3) // the canvas ratio is always 3:2
+  pos = {
+    x: 100,
+    y: 100,
   };
-  spawnBall(50,);
 }
 
 function draw() {
-  background(220);
+  background(200);
+  spawnBall(pos, 1,50, dimensions);
   displayBall();
-  ballPhysics();
+  //ballPhysics();
 }
 
 function displayBall() {
@@ -61,16 +60,18 @@ function displayBall() {
 }
 
 
-function spawnBall(position, velocity, radius, localDimensions) {
-  newBall.position = position;
+function spawnBall(velocity, radius, dimensions) {
+  newBall.position.X = pos.x;
+  newBall.position.Y = pos.y;
   newBall.velocity = velocity;
   newBall.radius = radius;
   borderCoords = {
     top: radius,
-    bottom: localDimensions.height - radius,
+    bottom: dimensions.height - radius,
     left: radius,
-    right: localDimensions.width - radius
+    right: dimensions.width - radius
   };
+  ballArray.push(newBall);
 }
 
 
