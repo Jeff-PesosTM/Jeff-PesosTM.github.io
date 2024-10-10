@@ -7,9 +7,10 @@
 - [bouncing balls](bouncing-balls)
 - [generative art](gen-art)
 - [perlin noise ball](perlin)
+- [perlin terrain generation](terrain-gen)
+- [bubble object demo](bubble-demo)
 
 
 ## projects
 - [interactive scene](interactive-scene)
-- [perlin terrain generation](terrain-gen)
 - [arrays and object notation assignment](array-notation)
