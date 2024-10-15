@@ -25,7 +25,7 @@ let mvmt = { // movement properties
   velocityFactor: 0.07 // velocity factor
 };
 
-class Walker {
+class ballBuilder {
   constructor() { // variables
     this.x = width/2;
     this.y = height/2;
@@ -90,9 +90,8 @@ function spawnBall(velocity, radius, dimensions) {
 }
 
 function VerticalBall(position, velocity, radius, localDimensions) {
-  Ball.call(this, position, velocity.mult(verticalMovementProperties.velocityFactor), radius, localDimensions);
+  ballBuilder.call(this, position, velocity.mult(mvmt.velocityFactor), radius, localDimensions);
 }
-
 
 function ballPhysics() {
   if (newBall.velocity.isNearZero() && newBall.position.Y === borderCoords.bottom && !newBall.velocity.isZero()){
