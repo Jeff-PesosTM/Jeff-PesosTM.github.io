@@ -10,22 +10,26 @@ let ballSize = 30;
 
 let obstacleArray = [];
 
-let brickAmount = 7;
 let brickSize = 40;
-let spacing = 100;
+let spacing;
 
-let sideBuffer = 50;
+let sideBuffer;
+
+let paddleX;
+let paddleY;
+let paddleWidth = 100;
+let paddleHeight = 10;
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ballY = windowHeight-(40 + 10);
   ballX = windowWidth/2;
-  for(let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing){
-    let aBrick = spawnBrick(x, 0);
-    obstacleArray.push(aBrick);
-  }
-  console.log(obstacleArray);
+  mapSetup();
+  //for(let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing){
+  //let aBrick = spawnBrick(x, 0);
+  //obstacleArray.push(aBrick);
+  //}
 }
 
 function draw() {
@@ -36,8 +40,18 @@ function draw() {
   displayObstacles();
 }
 
+// player functions
 function player() {
-  rect(mouseX, windowHeight-40, 100, 10); // paddle
+  paddleY = windowHeight-40;
+  paddleX = mouseX - paddleWidth/2;
+  rect(paddleX, paddleY, paddleWidth, paddleHeight); // paddle
+  if (paddleHit(paddleX, paddleY)) {
+    dy = -3;
+  }
+}
+
+function paddleHit(x,y) { // used to detect if the ball hits the paddle
+  return ballX >= x && ballX <= x + paddleWidth && ballY >= y - ballSize/2 && ballY <= y + paddleHeight;
 }
 
 function ballLogic(){
@@ -52,9 +66,7 @@ function ballLogic(){
   ballY += dy;
 }
 
-
 // brick death logic
-
 function checkCollision() {
   for (let brick of obstacleArray){
     if (obstacleHit(ballX, ballY, brick)) {
@@ -64,16 +76,12 @@ function checkCollision() {
   }
 }
 
-
 function obstacleHit(x,y, theBrick) { // used in collision function
   let distanceAway = dist(x, y, theBrick.x + brickSize*2, theBrick.y + brickSize);
   return distanceAway <= ballSize; 
 }
 
-
-
 // obstacle logic
-
 // spawning obstacle function used in setup
 function spawnBrick(x,y){
   let brick = {
@@ -82,6 +90,28 @@ function spawnBrick(x,y){
   };
   return brick;
 }
+
+function mapSetup() {
+  let brickHAmount = 7;
+  sideBuffer = windowWidth/8;
+  let x = sideBuffer/2;
+  spacing = windowWidth/brickHAmount;
+  while (brickHAmount > 0){
+    let brickVAmount = 4;
+    let y = sideBuffer/2;
+    while (brickVAmount > 0) {
+      let aBrick = spawnBrick(x, y);
+      obstacleArray.push(aBrick);
+      y += spacing;
+      brickVAmount--;
+    }
+    x += spacing;
+    brickHAmount--;
+  }
+}
+
+//let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing
+//let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing
 
 //displays the bricks
 function displayObstacles() {
