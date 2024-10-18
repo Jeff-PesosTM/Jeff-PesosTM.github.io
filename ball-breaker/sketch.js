@@ -2,34 +2,36 @@
 // array and object notation project
 // 10/15/2024
 
-let ballX;  
-let ballY; 
-let dx = 5;
-let dy = -3;
-let ballSize = 30;
+let ball = {
+  x: 0,
+  y: 0,
+  dx: 5,
+  dy: -3,
+  size: 30,
+};
 
 let obstacleArray = [];
 
-let brickSize = 40;
-let spacing;
+let brickSize;
+let spacing = {
+  x: 0,
+  y: 0,
+};
 
 let sideBuffer;
 
-let paddleX;
-let paddleY;
-let paddleWidth = 100;
-let paddleHeight = 10;
-
+let paddle = {
+  x: 0,
+  y: 0,
+  width: 100,
+  height: 10,
+};
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  ballY = windowHeight-(40 + 10);
-  ballX = windowWidth/2;
+  ball.y = windowHeight-(40 + 10);
+  ball.x = windowWidth/2;
   mapSetup();
-  //for(let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing){
-  //let aBrick = spawnBrick(x, 0);
-  //obstacleArray.push(aBrick);
-  //}
 }
 
 function draw() {
@@ -42,43 +44,44 @@ function draw() {
 
 // player functions
 function player() {
-  paddleY = windowHeight-40;
-  paddleX = mouseX - paddleWidth/2;
-  rect(paddleX, paddleY, paddleWidth, paddleHeight); // paddle
-  if (paddleHit(paddleX, paddleY)) {
-    dy = -3;
+  paddle.y = windowHeight-40;
+  paddle.x = mouseX - paddle.width/2;
+  rect(paddle.x, paddle.y, paddle.width, paddle.height); // paddle
+  if (paddleHit(paddle.x, paddle.y)) {
+    ball.dy = -3;
   }
 }
 
-function paddleHit(x,y) { // used to detect if the ball hits the paddle
-  return ballX >= x && ballX <= x + paddleWidth && ballY >= y - ballSize/2 && ballY <= y + paddleHeight;
+// used to detect if the ball hits the paddle
+function paddleHit(x,y) {
+  return ball.x >= x && ball.x <= x + paddle.width && ball.y >= y - ball.size/2 && ball.y <= y + paddle.height;
 }
 
 function ballLogic(){
-  ellipse(ballX, ballY, ballSize, ballSize); // ball
-  if (ballX >= width - ballSize/2 || ballX <= 0 + ballSize/2){
-    dx *= -1;
+  ellipse(ball.x, ball.y, ball.size, ball.size); // ball
+  if (ball.x >= width - ball.size/2 || ball.x <= 0 + ball.size/2){
+    ball.dx *= -1;
   }
-  if (ballY >= height - ballSize/2 || ballY <= 0 + ballSize/2) {
-    dy *= -1;
+  if (ball.y >= height - ball.size/2 || ball.y <= 0 + ball.size/2) {
+    ball.dy *= -1;
   }
-  ballX += dx;
-  ballY += dy;
+  ball.x += ball.dx;
+  ball.y += ball.dy;
 }
 
 // brick death logic
 function checkCollision() {
   for (let brick of obstacleArray){
-    if (obstacleHit(ballX, ballY, brick)) {
+    if (obstacleHit(ball.x, ball.y, brick)) {
       obstacleArray.splice(obstacleArray.indexOf(brick), 1);
-      dy *= -1;
+      ball.dy *= -1;
     }
   }
 }
 
-function obstacleHit(x,y, theBrick) { // used in collision function
-  let distanceAway = dist(x, y, theBrick.x + brickSize*2, theBrick.y + brickSize);
-  return distanceAway <= ballSize; 
+// used to detect if ball hits a brick
+function obstacleHit(x,y, theBrick) {
+  return x + ball.size/2 >= theBrick.x && x - ball.size/2 <= theBrick.x + brickSize*2 && y + ball.size/2 >= theBrick.y && y - ball.size/2 <= theBrick.y + brickSize;
 }
 
 // obstacle logic
@@ -93,29 +96,29 @@ function spawnBrick(x,y){
 
 function mapSetup() {
   let brickHAmount = 7;
-  sideBuffer = windowWidth/8;
-  let x = sideBuffer/2;
-  spacing = windowWidth/brickHAmount;
+  brickSize = windowWidth/20;
+  sideBuffer = windowWidth/16;
+  let x = sideBuffer;
+  spacing.x = windowWidth/brickHAmount-brickSize/4;
+  spacing.y = windowHeight/brickHAmount-brickSize/8;
+
   while (brickHAmount > 0){
     let brickVAmount = 4;
-    let y = sideBuffer/2;
+    let y = sideBuffer;
     while (brickVAmount > 0) {
       let aBrick = spawnBrick(x, y);
       obstacleArray.push(aBrick);
-      y += spacing;
+      y += spacing.y;
       brickVAmount--;
     }
-    x += spacing;
+    x += spacing.x;
     brickHAmount--;
   }
 }
 
-//let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing
-//let x = sideBuffer/2; x <= windowWidth - sideBuffer/2; x += spacing
-
 //displays the bricks
 function displayObstacles() {
   for (let aBrick of obstacleArray){
-    rect(aBrick.x, aBrick.y, brickSize * 2, brickSize);
+    rect(aBrick.x, aBrick.y, brickSize * 2, brickSize, 10);
   }
 }
