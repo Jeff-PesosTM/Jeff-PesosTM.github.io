@@ -13,5 +13,5 @@
 
 ## projects
 - [interactive scene](interactive-scene)
-- [arrays and object notation assignment](array-notation)
-- [ball breaker](ball-breaker)
+- [classes test](array-notation)
+- [ball breaker (arrays and object notation assignment)](ball-breaker)

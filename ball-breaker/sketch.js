@@ -1,6 +1,7 @@
 // grady chovan
 // array and object notation project
 // 10/15/2024
+//Extra for experts: basic compatibility with window resizing
 
 let ball = {
   x: 0,
@@ -10,15 +11,10 @@ let ball = {
   size: 30,
 };
 
-let obstacleArray = [];
-
-let brickSize;
 let spacing = {
   x: 0,
   y: 0,
 };
-
-let sideBuffer;
 
 let paddle = {
   x: 0,
@@ -26,6 +22,11 @@ let paddle = {
   width: 100,
   height: 10,
 };
+
+let sideBuffer;
+let brickSize;
+
+let obstacleArray = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -42,11 +43,12 @@ function draw() {
   displayObstacles();
 }
 
+//////////////////////////////////////////
 // player functions
 function player() {
   paddle.y = windowHeight-40;
   paddle.x = mouseX - paddle.width/2;
-  rect(paddle.x, paddle.y, paddle.width, paddle.height); // paddle
+  rect(paddle.x, paddle.y, paddle.width, paddle.height); // actual paddle
   if (paddleHit(paddle.x, paddle.y)) {
     ball.dy = -3;
   }
@@ -57,9 +59,10 @@ function paddleHit(x,y) {
   return ball.x >= x && ball.x <= x + paddle.width && ball.y >= y - ball.size/2 && ball.y <= y + paddle.height;
 }
 
+///////////////////////////////////////////
 function ballLogic(){
   ellipse(ball.x, ball.y, ball.size, ball.size); // ball
-  if (ball.x >= width - ball.size/2 || ball.x <= 0 + ball.size/2){
+  if (ball.x >= width - ball.size/2 || ball.x <= 0 + ball.size/2) {
     ball.dx *= -1;
   }
   if (ball.y >= height - ball.size/2 || ball.y <= 0 + ball.size/2) {
@@ -69,6 +72,7 @@ function ballLogic(){
   ball.y += ball.dy;
 }
 
+///////////////////////////////////////////
 // brick death logic
 function checkCollision() {
   for (let brick of obstacleArray){
