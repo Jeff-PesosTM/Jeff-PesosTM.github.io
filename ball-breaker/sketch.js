@@ -1,6 +1,7 @@
 // grady chovan
 // array and object notation project
 // 10/15/2024
+//instructions: use the "a" or "d" key to move left or right, scroll wheel to change paddle width.
 //Extra for experts: basic compatibility with window resizing
 
 let ball = {
