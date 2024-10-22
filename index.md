@@ -8,7 +8,8 @@
 - [generative art](gen-art)
 - [perlin noise ball](perlin)
 - [perlin terrain generation](terrain-gen)
-- [bubble object demo](bubble-demo)
+- [bubble object demo](bubble-demo) 
+- [array^2 demo](2d-array)
 
 
 ## projects
