@@ -1,16 +1,9 @@
 // two dimensional array demo
 //10/22/2024
 
-
-//hardcoded grid
-//let grid = [[1, 0, 1, 0],
-//  [0, 0, 1, 1],
-//  [1, 1, 1, 0],
-//  [0, 1, 1, 0]];
-
 let grid;
 
-let squareSize;
+let cellSize;
 
 const GRID_SIZE = 8;
 
@@ -21,7 +14,7 @@ function setup() {
   else {
     createCanvas(windowHeight, windowHeight);
   }
-  squareSize = height/GRID_SIZE;
+  cellSize = height/GRID_SIZE;
   grid = generateRandomGrid(GRID_SIZE, GRID_SIZE);
 }
 
@@ -73,10 +66,27 @@ function displayGrid() {
       if (grid[y][x] === 1) {
         fill("black");
       }
-      else if (grid[y][x] === 0) {
+      if (grid[y][x] === 0) {
         fill("white");
       }
-      square(x * squareSize, y * squareSize, squareSize);
+      square(x * cellSize, y * cellSize, cellSize);
+    }
+  }
+}
+
+function mousePressed() {
+  // console.log('x:', Math.ceil(mouseX/cellSize))
+  // console.log('y:', Math.ceil(mouseY/cellSize))
+  let xCor = Math.ceil(mouseX/cellSize)-1;
+  let yCor = Math.ceil(mouseY/cellSize)-1;
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      if (grid[y][x] === 0 && yCor === y && xCor === x) {
+        grid[y][x] = 1;
+      }
+      else if (grid[y][x] === 1 && yCor === y && xCor === x) {
+        grid[y][x] = 0;
+      }
     }
   }
 }
