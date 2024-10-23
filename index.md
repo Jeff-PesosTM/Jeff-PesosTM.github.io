@@ -16,3 +16,4 @@
 - [interactive scene](interactive-scene)
 - [classes test](array-notation)
 - [ball breaker (arrays and object notation assignment)](ball-breaker)
+- [minesweeper] (minesweeper-v1)
