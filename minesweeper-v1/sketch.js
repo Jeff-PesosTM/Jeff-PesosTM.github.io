@@ -5,7 +5,7 @@ let grid;
 
 let cellSize;
 
-const GRID_SIZE = 8;
+const GRID_SIZE = 5;
 
 let visual = {
   covered: 0,
@@ -30,6 +30,8 @@ function setup() {
   }
   cellSize = height/GRID_SIZE;
   grid = generateRandomGrid(GRID_SIZE, GRID_SIZE);
+  textSize(200);
+  textAlign(CENTER, CENTER);
 }
 
 function draw() {
@@ -37,17 +39,26 @@ function draw() {
   displayGrid();
 }
 
+function windowResized() {
+  if(windowWidth < windowHeight) {
+    resizeCanvas(windowWidth, windowWidth);
+  }
+  else {
+    resizeCanvas(windowHeight, windowHeight);
+  }
+  cellSize = height/GRID_SIZE;
+}
+
 function generateRandomGrid(cols, rows) {
   let newGrid = [];
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
-      //randomizer
-      if (random(100) < 50) {
-        newGrid[y].push(1);
+      if (random(100) <= 10) { // 10% chance to spawn a mine
+        newGrid[y].push(visual.mine);
       }
       else {
-        newGrid[y].push(0);
+        newGrid[y].push(visual.empty);
       }
     }
   }
@@ -77,29 +88,58 @@ function keyPressed() {
 function displayGrid() {
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
-      if (grid[y][x] === 1) {
-        fill("black");
+      if (grid[y][x] === visual.mine) {
+        fill("red");
       }
-      if (grid[y][x] === 0) {
+      if (grid[y][x] === visual.empty) {
         fill("white");
       }
+      if (grid[y][x] === visual.one){
+        fill("green");
+        //text("test", x*cellSize, y* cellSize);
+        console.log("test display");
+      }
+
       square(x * cellSize, y * cellSize, cellSize);
     }
   }
 }
 
 function mousePressed() {
-  // console.log('x:', Math.ceil(mouseX/cellSize))
-  // console.log('y:', Math.ceil(mouseY/cellSize))
   let xCor = Math.ceil(mouseX/cellSize)-1;
   let yCor = Math.ceil(mouseY/cellSize)-1;
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
-      if (grid[y][x] === 0 && yCor === y && xCor === x) {
-        grid[y][x] = 1;
+      if (yCor === y && xCor === x) {
+        console.log(grid[y][x]);
       }
-      else if (grid[y][x] === 1 && yCor === y && xCor === x) {
-        grid[y][x] = 0;
+      // if (grid[y][x] === 0 && yCor === y && xCor === x) {
+      //   grid[y][x] = 1;
+      // }
+      // else if (grid[y][x] === 1 && yCor === y && xCor === x) {
+      //   grid[y][x] = 0;
+      // }
+    }
+  }
+}
+
+function countMines() {
+  let mineCount = 0;
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+
+      if (grid[y][x] === visual.mine) {
+
+        for (let y = 0; y < 9; y++) {
+          for (let x = 0; x < 9; x++) {
+            if (grid[y][x] === visual.mine) {
+              mineCount++;
+            }
+          }
+        }
+        grid[y][x].splice(x, 1, mineCount);
+        console.log(mineCount);
+        mineCount = 0;
       }
     }
   }
