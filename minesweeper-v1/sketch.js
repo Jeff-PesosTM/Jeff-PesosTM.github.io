@@ -7,6 +7,20 @@ let cellSize;
 
 const GRID_SIZE = 8;
 
+let visual = {
+  covered: 0,
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  flagged: 8,
+  mine: 9,
+  empty: 10,
+};
+
 function setup() {
   if(windowWidth < windowHeight) {
     createCanvas(windowWidth, windowWidth);
