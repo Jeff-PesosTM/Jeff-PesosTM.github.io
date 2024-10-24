@@ -97,7 +97,7 @@ function displayGrid() {
       if (grid[y][x] === visual.one){
         fill("green");
         //text("test", x*cellSize, y* cellSize);
-        console.log("test display");
+        //console.log("test display");
       }
 
       square(x * cellSize, y * cellSize, cellSize);
@@ -106,19 +106,28 @@ function displayGrid() {
 }
 
 function mousePressed() {
-  let xCor = Math.ceil(mouseX/cellSize)-1;
-  let yCor = Math.ceil(mouseY/cellSize)-1;
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
-      if (yCor === y && xCor === x) {
-        console.log(grid[y][x]);
-      }
-      // if (grid[y][x] === 0 && yCor === y && xCor === x) {
-      //   grid[y][x] = 1;
-      // }
-      // else if (grid[y][x] === 1 && yCor === y && xCor === x) {
-      //   grid[y][x] = 0;
-      // }
+  let x = Math.floor(mouseX/cellSize);
+  let y = Math.floor(mouseY/cellSize);
+
+  toggleCell(x, y);
+
+  //toggle neighbours
+  toggleCell(x - 1, y - 1);
+  toggleCell(x , y - 1);
+  toggleCell(x + 1, y-1 );
+
+  toggleCell(x-1 , y);
+  toggleCell(x, y + 1);
+}
+
+function toggleCell(x, y) {
+  //make sure the cell you're toggling is in the grid
+  if (x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE) {
+    if (grid[y][x] === visual.mine ) {
+      console.log("clicked on mine");
+    }
+    else if (grid[y][x] === visual.empty) {
+      console.log("reveal tile");
     }
   }
 }

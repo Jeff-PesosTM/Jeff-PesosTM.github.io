@@ -74,19 +74,45 @@ function displayGrid() {
   }
 }
 
+// function mousePressed() {
+//   // console.log('x:', Math.ceil(mouseX/cellSize))
+//   // console.log('y:', Math.ceil(mouseY/cellSize))
+//   let xCor = Math.ceil(mouseX/cellSize)-1;
+//   let yCor = Math.ceil(mouseY/cellSize)-1;
+//   for (let y = 0; y < GRID_SIZE; y++) {
+//     for (let x = 0; x < GRID_SIZE; x++) {
+//       if (grid[y][x] === 0 && yCor === y && xCor === x) {
+//         grid[y][x] = 1;
+//       }
+//       else if (grid[y][x] === 1 && yCor === y && xCor === x) {
+//         grid[y][x] = 0;
+//       }
+//     }
+//   }
+// }
+
 function mousePressed() {
-  // console.log('x:', Math.ceil(mouseX/cellSize))
-  // console.log('y:', Math.ceil(mouseY/cellSize))
-  let xCor = Math.ceil(mouseX/cellSize)-1;
-  let yCor = Math.ceil(mouseY/cellSize)-1;
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
-      if (grid[y][x] === 0 && yCor === y && xCor === x) {
-        grid[y][x] = 1;
-      }
-      else if (grid[y][x] === 1 && yCor === y && xCor === x) {
-        grid[y][x] = 0;
-      }
+  let x = Math.floor(mouseX/cellSize);
+  let y = Math.floor(mouseY/cellSize);
+
+  //toggle self
+  toggleCell(x, y);
+
+  //toggle neighbours
+  toggleCell(x - 1, y);
+  toggleCell(x + 1, y);
+  toggleCell(x, y - 1);
+  toggleCell(x, y + 1);
+}
+
+function toggleCell(x, y) {
+  //make sure the cell you're toggling is in the grid
+  if (x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE) {
+    if (grid[y][x] === 0) {
+      grid[y][x] = 1;
+    }
+    else {
+      grid[y][x] = 0;
     }
   }
 }
