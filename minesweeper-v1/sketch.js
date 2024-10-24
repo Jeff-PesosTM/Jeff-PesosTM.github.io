@@ -90,17 +90,13 @@ function displayGrid() {
     for (let x = 0; x < GRID_SIZE; x++) {
       if (grid[y][x] === visual.mine) {
         fill("red");
+        square(x * cellSize, y * cellSize, cellSize);
       }
       if (grid[y][x] === visual.empty) {
         fill("white");
-      }
-      if (grid[y][x] === visual.one){
-        fill("green");
-        //text("test", x*cellSize, y* cellSize);
-        //console.log("test display");
+        square(x * cellSize, y * cellSize, cellSize);
       }
 
-      square(x * cellSize, y * cellSize, cellSize);
     }
   }
 }
@@ -110,14 +106,6 @@ function mousePressed() {
   let y = Math.floor(mouseY/cellSize);
 
   toggleCell(x, y);
-
-  //toggle neighbours
-  // toggleCell(x - 1, y - 1);
-  // toggleCell(x , y - 1);
-  // toggleCell(x + 1, y-1 );
-
-  // toggleCell(x-1 , y);
-  // toggleCell(x, y + 1);
 }
 
 function toggleCell(x, y) {
@@ -127,7 +115,7 @@ function toggleCell(x, y) {
       console.log("clicked on mine");
     }
     else if (grid[y][x] === visual.empty) {
-      countMines(x, y);
+      testCountMines(x, y);
       //console.log("reveal tile");
     }
   }
@@ -136,13 +124,37 @@ function toggleCell(x, y) {
 function countMines(x, y) {
   let mineCount = 0;
   console.log("test");
-  for (let v = -1; v < 1; v++) {
-    for (let h = -1; h < 1; h++) {
-      console.log(mineCount);
-      if (grid[y + v][x + h] === visual.mine) {
-        mineCount++;
-        //console.log(mineCount);
-      }
-    }
+}
+
+function testCountMines(x, y) {
+  let mineCount = 0;
+  if (grid[y-1][x -1] === visual.mine) {
+    mineCount++;
   }
+  if (grid[y-1][x] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y-1][x +1] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y][x -1] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y][x] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y][x +1] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y+1][x -1] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y+1][x] === visual.mine) {
+    mineCount++;
+  }
+  if (grid[y+1][x+1] === visual.mine) {
+    mineCount++;
+  }
+  console.log(mineCount);
+  return mineCount;
 }
