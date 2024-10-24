@@ -112,12 +112,12 @@ function mousePressed() {
   toggleCell(x, y);
 
   //toggle neighbours
-  toggleCell(x - 1, y - 1);
-  toggleCell(x , y - 1);
-  toggleCell(x + 1, y-1 );
+  // toggleCell(x - 1, y - 1);
+  // toggleCell(x , y - 1);
+  // toggleCell(x + 1, y-1 );
 
-  toggleCell(x-1 , y);
-  toggleCell(x, y + 1);
+  // toggleCell(x-1 , y);
+  // toggleCell(x, y + 1);
 }
 
 function toggleCell(x, y) {
@@ -127,28 +127,21 @@ function toggleCell(x, y) {
       console.log("clicked on mine");
     }
     else if (grid[y][x] === visual.empty) {
-      console.log("reveal tile");
+      countMines(x, y);
+      //console.log("reveal tile");
     }
   }
 }
 
-function countMines() {
+function countMines(x, y) {
   let mineCount = 0;
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
-
-      if (grid[y][x] === visual.mine) {
-
-        for (let y = 0; y < 9; y++) {
-          for (let x = 0; x < 9; x++) {
-            if (grid[y][x] === visual.mine) {
-              mineCount++;
-            }
-          }
-        }
-        grid[y][x].splice(x, 1, mineCount);
-        console.log(mineCount);
-        mineCount = 0;
+  console.log("test");
+  for (let v = -1; v < 1; v++) {
+    for (let h = -1; h < 1; h++) {
+      console.log(mineCount);
+      if (grid[y + v][x + h] === visual.mine) {
+        mineCount++;
+        //console.log(mineCount);
       }
     }
   }
