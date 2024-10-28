@@ -1,7 +1,6 @@
 // grady's minesweeper project
 //10/22/2024
 
-
 //things to work on: unable to lose on first move, ability to win, polishing with css stuff, flagging
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -12,15 +11,13 @@ let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
-const GRID_SIZE = 8
+const GRID_SIZE = 8;
 
 function preload() {
   bombSprite = loadImage("assets/bomb.png");
-  //boomSound = loadSound("assets/vine-boom.mp3");
 }
 
 function setup() {
- 
   //creates largest square possible
   if (windowHeight < windowWidth) {
     createCanvas(windowHeight*0.9, windowHeight*0.9);
@@ -28,7 +25,6 @@ function setup() {
   else {
     createCanvas(windowWidth*0.9, windowWidth*0.9);
   }
-  
 
   //create new 2d array
   grid = createArray(GRID_SIZE);
@@ -53,36 +49,8 @@ function setup() {
 //main draw loop
 function draw() {
   background(255);
-
-  //displays the grid
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++){
-      grid[y][x].showCells();
-    }
-  }
-
+  displayGrid();
   checkMousePress();
-
-  //if the game is lost, reveal the board, if "r" pressed reset the board
-  if (gameLost === true) {
-    for (let y = 0; y < GRID_SIZE; y++) {
-      for (let x = 0; x < GRID_SIZE; x++){
-        grid[y][x].isRevealed = true;
-        if (keyIsDown(82)) {
-          setup();
-          gameLost = false;
-        }
-      }
-    }
-    //displays the game over text on game lost
-    fill("red");
-    textAlign(CENTER);
-    textSize(width/10);
-    text("boom", width/2, height/2);
-    fill("yellow");
-    textSize(width/30);
-    text("Press R to play again!", width/2, height/1.8);
-  }
 }
 
 
@@ -207,7 +175,7 @@ function checkMousePress() {
             grid[y][x].revealCells();
             //if mouse pressed on bomb game is lost
             if (grid[y][x].isBomb) {
-              gameLost = true;
+              gameOver();
             }
           }
         }
@@ -223,4 +191,32 @@ function createArray(howLarge) {
     newArray.push([]);
   }
   return newArray;
+}
+
+function displayGrid() {
+  //displays the grid
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++){
+      grid[y][x].showCells();
+    }
+  }
+}
+
+function gameOver() {
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++){
+      grid[y][x].isRevealed = true;
+      if (keyIsDown(82)) {
+        setup();
+      }
+    }
+  }
+  //displays the game over text on game lost
+  fill("red");
+  textAlign(CENTER);
+  textSize(width/10);
+  text("boom", width/2, height/2);
+  fill("yellow");
+  textSize(width/30);
+  text("Press R to play again!", width/2, height/1.8);
 }
