@@ -12,6 +12,7 @@
 - [array^2 demo](2d-array)
 - [game of life](game-of-life)
 - [rectangle grid](rectangle-grid)
+- [character grid](character-grid)
 
 
 ## projects

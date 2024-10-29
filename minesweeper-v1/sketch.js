@@ -30,20 +30,7 @@ function setup() {
   grid = createArray(GRID_SIZE);
   cellSize = floor(width / GRID_SIZE);
 
-  //initiate each position in grid to become a cell object
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
-      grid[y][x] = new Cell(y*cellSize, x*cellSize, cellSize);
-      grid[y][x].createBomb();
-    } 
-  }
-
-  //check adjacent cells in the grid (neighbours)
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
-      grid[y][x].checkAdjacentCells();
-    } 
-  }
+  startGame();
 }
 
 //main draw loop
@@ -51,6 +38,7 @@ function draw() {
   background(255);
   displayGrid();
   checkMousePress();
+  gameOver();
 }
 
 
@@ -67,7 +55,7 @@ class Cell {
   
   //creates a random bomb in the grid 
   createBomb() {
-    if (random(0, 100) > 85) {
+    if (random(100) > 85) {
       this.isBomb = true;
       bombAmount++;
     }
@@ -85,7 +73,7 @@ class Cell {
     if (this.isRevealed) {
       //bombs sprite revealed
       if (this.isBomb) {
-        image(bombSprite, this.x, this.y, this.size, this.size); ///////// REPLACE
+        image(bombSprite, this.x, this.y, this.size, this.size);
       }
       else {
         //other revealed
@@ -175,6 +163,7 @@ function checkMousePress() {
             grid[y][x].revealCells();
             //if mouse pressed on bomb game is lost
             if (grid[y][x].isBomb) {
+              gameLost = true;
               gameOver();
             }
           }
@@ -203,20 +192,40 @@ function displayGrid() {
 }
 
 function gameOver() {
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++){
-      grid[y][x].isRevealed = true;
-      if (keyIsDown(82)) {
-        setup();
+  //displays the game over text on game lost
+  if (gameLost) {
+    fill("red");
+    textAlign(CENTER);
+    textSize(width/10);
+    text("boom", width/2, height/2);
+    fill("yellow");
+    textSize(width/30);
+    text("Press R to play again!", width/2, height/1.8);
+
+    //reveals remaining tiles
+    for (let y = 0; y < GRID_SIZE; y++) {
+      for (let x = 0; x < GRID_SIZE; x++){
+        grid[y][x].isRevealed = true;
       }
     }
   }
-  //displays the game over text on game lost
-  fill("red");
-  textAlign(CENTER);
-  textSize(width/10);
-  text("boom", width/2, height/2);
-  fill("yellow");
-  textSize(width/30);
-  text("Press R to play again!", width/2, height/1.8);
+  if (keyPressed() === "r") {
+    gameLost = !gameLost;
+  }
+}
+
+function startGame() {
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      grid[y][x] = new Cell(y*cellSize, x*cellSize, cellSize);
+      grid[y][x].createBomb();
+    } 
+  }
+
+  //check adjacent cells in the grid (neighbours)
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      grid[y][x].checkAdjacentCells();
+    } 
+  }
 }
