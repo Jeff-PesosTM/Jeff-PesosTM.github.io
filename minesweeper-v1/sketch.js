@@ -1,7 +1,7 @@
 // grady's minesweeper project
 //10/22/2024
 
-//things to work on: unable to lose on first move, ability to win, polishing with css stuff, flagging
+//things to work on: ability to win, polishing with css stuff, flagging
 
 ///////////////////////////////////////////////////////////////////////////////////
 
