@@ -11,7 +11,8 @@ let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
-const GRID_SIZE = 8;
+const GRID_SIZE = 16;
+let isFirstClick = true;
 
 function preload() {
   bombSprite = loadImage("assets/bomb.png");
@@ -29,7 +30,6 @@ function setup() {
   //create new 2d array
   grid = createArray(GRID_SIZE);
   cellSize = floor(width / GRID_SIZE);
-
   startGame();
 }
 
@@ -146,7 +146,6 @@ class Cell {
       }
     }
   }
-
   //checks if mouse is hovering on the boundaries of a cell
   mouseOnCell(x, y) {
     return x > this.x && x < this.x + this.size && y > this.y && y < this.y + this.size;
@@ -160,11 +159,32 @@ function checkMousePress() {
       for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++){
           if (grid[y][x].mouseOnCell(mouseX, mouseY)) {
-            grid[y][x].revealCells();
-            //if mouse pressed on bomb game is lost
-            if (grid[y][x].isBomb) {
-              gameLost = true;
-              gameOver();
+            if (isFirstClick) {
+              if (grid[y][x].isBomb) {
+                grid[y][x].isBomb = false;
+                for (let i = -1; i < 2; i++) {
+                  for (let j = -1; j < 2; j++){
+                    grid[y + i][x + j].checkAdjacentCells();
+                  }
+                }
+              }
+              else {
+                grid[y][x].revealCells();
+                //if mouse pressed on bomb game is lost
+                if (grid[y][x].isBomb) {
+                  gameLost = true;
+                  gameOver();
+                }
+              }
+              isFirstClick = false;
+            }
+            else {
+              grid[y][x].revealCells();
+              //if mouse pressed on bomb game is lost
+              if (grid[y][x].isBomb) {
+                gameLost = true;
+                gameOver();
+              }
             }
           }
         }
@@ -201,20 +221,23 @@ function gameOver() {
     fill("yellow");
     textSize(width/30);
     text("Press R to play again!", width/2, height/1.8);
-
-    //reveals remaining tiles
+    //reveals remaining tiles and reset if user presses "r"
     for (let y = 0; y < GRID_SIZE; y++) {
       for (let x = 0; x < GRID_SIZE; x++){
         grid[y][x].isRevealed = true;
+        if (keyIsDown(82)) {
+          startGame();
+          gameLost = false;
+          isFirstClick = true;
+        }
       }
     }
   }
-  if (keyPressed() === "r") {
-    gameLost = !gameLost;
-  }
 }
 
+//used during setup, and when game is reset
 function startGame() {
+  //creates cell objects and randomizes bomb placement
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
       grid[y][x] = new Cell(y*cellSize, x*cellSize, cellSize);
