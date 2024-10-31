@@ -1,7 +1,11 @@
 // grady's minesweeper project
 //10/22/2024
 
-//things to work on: ability to win, polishing with css stuff, flagging
+//extra for experts: even listeners to prevent some default functions, using classes to build cells
+
+//features: right click to flag, you cant lose on the first move
+
+//things to work on: ability to win, polishing with css stuff
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -11,11 +15,16 @@ let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
-const GRID_SIZE = 16;
+const GRID_SIZE = 4;
 let isFirstClick = true;
+let gameWon = false;
+
+addEventListener("contextmenu", rightClick, false);
 
 function preload() {
   bombSprite = loadImage("assets/bomb.png");
+  flagSprite = loadImage("assets/flag.png");
+  tileSprite = loadImage("assets/tile.jpg");
 }
 
 function setup() {
@@ -39,6 +48,7 @@ function draw() {
   displayGrid();
   checkMousePress();
   gameOver();
+  checkGameWin();
 }
 
 
@@ -51,6 +61,7 @@ class Cell {
     this.isBomb = false;
     this.neighbourAmount = 0;
     this.neighbourColors = ["blue", "green", "red", "purple", "maroon", "turquoise", "black", "grey"];
+    this.flag = false;
   }
   
   //creates a random bomb in the grid 
@@ -66,10 +77,12 @@ class Cell {
 
   //displays cells in the grid
   showCells() {
-    noFill();
     stroke(0);
-    rect(this.x, this.y, this.size, this.size);
-    
+    image(tileSprite, this.x, this.y, this.size, this.size);
+
+    if (this.flag && gameLost === false) {
+      image(flagSprite, this.x, this.y, this.size, this.size);
+    }
     if (this.isRevealed) {
       //bombs sprite revealed
       if (this.isBomb) {
@@ -190,6 +203,15 @@ function checkMousePress() {
         }
       }
     }
+    else if (mouseButton === RIGHT) {
+      for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++){
+          if (grid[y][x].mouseOnCell(mouseX, mouseY)) {
+            grid[y][x].flag = true;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -209,6 +231,11 @@ function displayGrid() {
       grid[y][x].showCells();
     }
   }
+  if (keyIsDown(82)) {
+    startGame();
+    gameLost = false;
+    isFirstClick = true;
+  }
 }
 
 function gameOver() {
@@ -225,13 +252,29 @@ function gameOver() {
     for (let y = 0; y < GRID_SIZE; y++) {
       for (let x = 0; x < GRID_SIZE; x++){
         grid[y][x].isRevealed = true;
-        if (keyIsDown(82)) {
-          startGame();
-          gameLost = false;
-          isFirstClick = true;
-        }
       }
     }
+  }
+}
+
+function checkGameWin() {
+  let openedCount = 0;
+  if (gameWon) {
+    fill("blue");
+    textAlign(CENTER);
+    textSize(width/10);
+    text("you win!", width/2, height/2);
+  }
+  for (let y = 0; y < GRID_SIZE; y++) {
+    for (let x = 0; x < GRID_SIZE; x++) {
+      if (!grid[y][x].isBomb && grid[y][x].isRevealed) {
+        openedCount++;
+      }
+    } 
+  }
+  if (openedCount + bombAmount === GRID_SIZE * GRID_SIZE && !gameLost) {
+    gameWon = true;
+    console.log("gamewon test");
   }
 }
 
@@ -251,4 +294,9 @@ function startGame() {
       grid[y][x].checkAdjacentCells();
     } 
   }
+}
+
+//prevents right click from
+function rightClick(event) {
+  event.preventDefault();
 }
