@@ -233,8 +233,6 @@ function displayGrid() {
   }
   if (keyIsDown(82)) {
     startGame();
-    gameLost = false;
-    isFirstClick = true;
   }
 }
 
@@ -280,6 +278,9 @@ function checkGameWin() {
 
 //used during setup, and when game is reset
 function startGame() {
+  gameLost = false;
+  isFirstClick = true;
+  gameWon = false;
   //creates cell objects and randomizes bomb placement
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
