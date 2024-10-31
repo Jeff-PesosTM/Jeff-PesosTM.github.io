@@ -15,7 +15,7 @@ let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
-const GRID_SIZE = 4;
+const GRID_SIZE = 8;
 let isFirstClick = true;
 let gameWon = false;
 
@@ -175,6 +175,7 @@ function checkMousePress() {
             if (isFirstClick) {
               if (grid[y][x].isBomb) {
                 grid[y][x].isBomb = false;
+                bombAmount--;
                 for (let i = -1; i < 2; i++) {
                   for (let j = -1; j < 2; j++){
                     grid[y + i][x + j].checkAdjacentCells();
@@ -270,9 +271,8 @@ function checkGameWin() {
       }
     } 
   }
-  if (openedCount + bombAmount === GRID_SIZE * GRID_SIZE && !gameLost) {
+  if (GRID_SIZE * GRID_SIZE - bombAmount === openedCount && !gameLost) {
     gameWon = true;
-    console.log("gamewon test");
   }
 }
 
@@ -281,6 +281,7 @@ function startGame() {
   gameLost = false;
   isFirstClick = true;
   gameWon = false;
+  bombAmount = 0;
   //creates cell objects and randomizes bomb placement
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
