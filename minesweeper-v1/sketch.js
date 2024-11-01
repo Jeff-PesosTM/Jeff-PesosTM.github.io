@@ -9,15 +9,17 @@
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-let gameLost = false;
 let bombAmount = 0;
 let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
-const GRID_SIZE = 16;
+
 let isFirstClick = true;
+let gameLost = false;
 let gameWon = false;
+
+const GRID_SIZE = 16;
 
 addEventListener("contextmenu", rightClick, false);
 
@@ -28,7 +30,7 @@ function preload() {
 }
 
 function setup() {
-  //creates largest square possible
+  //creates largest square within window
   if (windowHeight < windowWidth) {
     createCanvas(windowHeight*0.9, windowHeight*0.9);
   }
@@ -36,13 +38,11 @@ function setup() {
     createCanvas(windowWidth*0.9, windowWidth*0.9);
   }
 
-  //create new 2d array
   grid = createArray(GRID_SIZE);
   cellSize = floor(width / GRID_SIZE);
   startGame();
 }
 
-//main draw loop
 function draw() {
   background(255);
   displayGrid();
@@ -64,7 +64,7 @@ class Cell {
     this.flag = false;
   }
   
-  //creates a random bomb in the grid 
+  //randomly creates bombs within the grid
   createBomb() {
     if (random(100) > 85) {
       this.isBomb = true;
@@ -78,11 +78,15 @@ class Cell {
   //displays cells in the grid
   showCells() {
     stroke(0);
+
+    //blank tile
     image(tileSprite, this.x, this.y, this.size, this.size);
 
+    //flag sprite
     if (this.flag && gameLost === false) {
       image(flagSprite, this.x, this.y, this.size, this.size);
     }
+
     if (this.isRevealed) {
       //bombs sprite revealed
       if (this.isBomb) {
