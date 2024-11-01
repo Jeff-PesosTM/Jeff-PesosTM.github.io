@@ -176,29 +176,14 @@ function checkMousePress() {
       for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++){
           if (grid[y][x].mouseOnCell(mouseX, mouseY)) {
+
+            //handles deleting the bomb if its the first tile you click
             if (isFirstClick) {
-              if (grid[y][x].isBomb) {
-                grid[y][x].isBomb = false;
-                bombAmount--;
-                for (let i = -1; i < 2; i++) {
-                  for (let j = -1; j < 2; j++){
-                    grid[y + i][x + j].checkAdjacentCells();
-                  }
-                }
-              }
-              else {
-                grid[y][x].revealCells();
-                //if mouse pressed on bomb game is lost
-                if (grid[y][x].isBomb) {
-                  gameLost = true;
-                  gameOver();
-                }
-              }
-              isFirstClick = false;
+              firstClickSafety(x, y);
             }
+            //handles losing the game
             else {
               grid[y][x].revealCells();
-              //if mouse pressed on bomb game is lost
               if (grid[y][x].isBomb) {
                 gameLost = true;
                 gameOver();
@@ -208,6 +193,8 @@ function checkMousePress() {
         }
       }
     }
+
+    //handles flagging
     else if (mouseButton === RIGHT) {
       for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++){
@@ -229,8 +216,8 @@ function createArray(howLarge) {
   return newArray;
 }
 
+//displays the grid and restarts when r key is pressed
 function displayGrid() {
-  //displays the grid
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++){
       grid[y][x].showCells();
@@ -251,7 +238,8 @@ function gameOver() {
     fill("yellow");
     textSize(width/30);
     text("Press R to play again!", width/2, height/1.8);
-    //reveals remaining tiles and reset if user presses "r"
+
+    //reveals remaining tiles
     for (let y = 0; y < GRID_SIZE; y++) {
       for (let x = 0; x < GRID_SIZE; x++){
         grid[y][x].isRevealed = true;
@@ -260,6 +248,7 @@ function gameOver() {
   }
 }
 
+//checks if every tile except the bomb tiles are opened
 function checkGameWin() {
   let openedCount = 0;
   if (gameWon) {
@@ -267,6 +256,9 @@ function checkGameWin() {
     textAlign(CENTER);
     textSize(width/10);
     text("you win!", width/2, height/2);
+    fill("yellow");
+    textSize(width/30);
+    text("Press R to play again!", width/2, height/1.8);
   }
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
@@ -280,13 +272,35 @@ function checkGameWin() {
   }
 }
 
+//function that clears 3x3 area around 1st click tile
+function firstClickSafety(x, y) {
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++){
+      if (grid[y + i][x + j].isBomb) {
+        grid[y + i][x + j].isBomb = false;
+        bombAmount--;
+      }
+
+      //rechecks cells adjacent to a deleted bomb
+      for (let z = -1; z < 2; z++) {
+        for (let k = -1; k < 2; k++){
+          grid[y + z + i][x + k + j].checkAdjacentCells();
+        }
+      }
+      grid[y + i][x + j].isRevealed;
+    }
+  }
+  isFirstClick = false;
+}
+
 //used during setup, and when game is reset
 function startGame() {
   gameLost = false;
   isFirstClick = true;
   gameWon = false;
   bombAmount = 0;
-  //creates cell objects and randomizes bomb placement
+
+  //creates cell objects
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
       grid[y][x] = new Cell(y*cellSize, x*cellSize, cellSize);
@@ -302,7 +316,7 @@ function startGame() {
   }
 }
 
-//prevents right click from
+//prevents right click from making context menu show up
 function rightClick(event) {
   event.preventDefault();
 }
