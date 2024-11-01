@@ -5,7 +5,7 @@
 
 //features: right click to flag, you cant lose on the first move
 
-//things to work on: ability to win, polishing with css stuff
+//things to work on: polishing with css stuff
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +15,7 @@ let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
-const GRID_SIZE = 8;
+const GRID_SIZE = 16;
 let isFirstClick = true;
 let gameWon = false;
 
