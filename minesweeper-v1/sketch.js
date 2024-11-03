@@ -5,7 +5,7 @@
 
 //features: right click to flag, you cant lose on the first move
 
-//things to work on: polishing with css stuff
+//things to work on: polishing with css stuff, add timer and difficulty selector
 
 ///////////////////////////////////////////////////////////////////////////////////
 

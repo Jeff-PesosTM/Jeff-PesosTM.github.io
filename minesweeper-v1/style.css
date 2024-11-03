@@ -1,8 +1,18 @@
 html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
   margin: 0;
-  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #545a55;
 }
 
 canvas {
-  display: block;
+  display: inline-block;
 }
+
+
