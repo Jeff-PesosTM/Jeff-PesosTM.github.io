@@ -39,7 +39,7 @@ function setup() {
   }
 
   grid = createArray(GRID_SIZE);
-  cellSize = floor(width / GRID_SIZE);
+  cellSize = width / GRID_SIZE;
   startGame();
 }
 
@@ -276,18 +276,24 @@ function checkGameWin() {
 function firstClickSafety(x, y) {
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++){
-      if (grid[y + i][x + j].isBomb) {
-        grid[y + i][x + j].isBomb = false;
-        bombAmount--;
-      }
-
-      //rechecks cells adjacent to a deleted bomb
-      for (let z = -1; z < 2; z++) {
-        for (let k = -1; k < 2; k++){
-          grid[y + z + i][x + k + j].checkAdjacentCells();
+      //makes sure the cell is within the grid to prevent errors
+      if (x + j > -1 && x + j < GRID_SIZE && y + i > -1 && y + i < GRID_SIZE) {
+        if (grid[y + i][x + j].isBomb) {
+          grid[y + i][x + j].isBomb = false;
+          bombAmount--;
         }
+
+        //rechecks cells adjacent to a deleted bomb to make sure they display the right bomb amounts
+        for (let z = -1; z < 2; z++) {
+          for (let k = -1; k < 2; k++){
+            // makes sure the cell is within the grid to prevent errors
+            if (x + k + j > -1 && x + j + k < GRID_SIZE && y + z + i > -1 && y + i + z < GRID_SIZE) {
+              grid[y + z + i][x + k + j].checkAdjacentCells();
+            }
+          }
+        }
+        grid[y + i][x + j].isRevealed;
       }
-      grid[y + i][x + j].isRevealed;
     }
   }
   isFirstClick = false;
