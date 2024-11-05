@@ -1,11 +1,11 @@
 // grady's minesweeper project
 //10/22/2024
 
-//extra for experts: even listeners to prevent some default functions, using classes to build cells
+//extra for experts: event listeners to prevent some default functions, using classes to build cells, changed some css stuff
 
-//features: right click to flag, you cant lose on the first move
+//features: right click to flag, you cant lose on the first move, flood fill algorithm
 
-//things to work on: polishing with css stuff, add timer and difficulty selector
+//things to work on: difficulty selector
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -14,6 +14,7 @@ let bombSprite;
 let musicLoop;
 let grid;
 let cellSize;
+let whenGameStart = 0;
 
 let isFirstClick = true;
 let gameLost = false;
@@ -32,7 +33,7 @@ function preload() {
 function setup() {
   //creates largest square within window
   if (windowHeight < windowWidth) {
-    createCanvas(windowHeight*0.9, windowHeight*0.9);
+    createCanvas(windowHeight*0.9, windowHeight*0.95);
   }
   else {
     createCanvas(windowWidth*0.9, windowWidth*0.9);
@@ -44,13 +45,24 @@ function setup() {
 }
 
 function draw() {
-  background(255);
+  background(0);
   displayGrid();
   checkMousePress();
   gameOver();
   checkGameWin();
+  displayTimer();
 }
 
+function displayTimer() {
+  if (isFirstClick === false) {
+    fill("red");
+    let secs = (millis() - whenGameStart)/1000;
+    let mins = secs/60
+    textSize(11);
+    textAlign(LEFT);
+    text(`Time elapsed: ${round(mins,0)} minutes, ${round(secs,0)} seconds`, 0, GRID_SIZE*cellSize + (cellSize/2));
+  }
+}
 
 class Cell {
   constructor(x, y, size) {
@@ -297,6 +309,7 @@ function firstClickSafety(x, y) {
     }
   }
   isFirstClick = false;
+  whenGameStart = millis();
 }
 
 //used during setup, and when game is reset
