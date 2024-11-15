@@ -7,17 +7,6 @@ html, body {
   background-color: #545a55;
 }
 
-p1 {
-  height: 20%;
-  width: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items:normal;
-
-  background-color: #574f55;
-}
-
 canvas {
   display: inline-block;
 }

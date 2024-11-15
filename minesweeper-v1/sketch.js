@@ -36,7 +36,7 @@ function setup() {
     createCanvas(windowHeight*0.9, windowHeight*0.95);
   }
   else {
-    createCanvas(windowWidth*0.9, windowWidth*0.9);
+    createCanvas(windowWidth*0.9, windowWidth*0.95);
   }
 
   grid = createArray(GRID_SIZE);
@@ -57,10 +57,10 @@ function displayTimer() {
   if (isFirstClick === false) {
     fill("red");
     let secs = (millis() - whenGameStart)/1000;
-    let mins = secs/60
+    let mins = secs/60;
     textSize(11);
     textAlign(LEFT);
-    text(`Time elapsed: ${round(mins,0)} minutes, ${round(secs,0)} seconds`, 0, GRID_SIZE*cellSize + (cellSize/2));
+    text(`Time elapsed: ${round(mins,0)} minutes, ${round(secs,0)} seconds`, 0, GRID_SIZE*cellSize + cellSize/2);
   }
 }
 
@@ -140,8 +140,8 @@ class Cell {
     for (let adjX = -1; adjX < 2; adjX++) {
       for (let adjY = -1; adjY < 2; adjY++){
         //the x/y is used to find the index value of the adjacent cells
-        let x = this.x/this.size + adjX;
-        let y = this.y/this.size + adjY;
+        let x = Math.round(this.x/this.size + adjX);
+        let y = Math.round(this.y/this.size + adjY);
 
         //sanity check
         if (x > -1 && x < GRID_SIZE && y > -1 && y < GRID_SIZE) {
@@ -161,8 +161,8 @@ class Cell {
     for (let adjX = -1; adjX < 2; adjX++) {
       for (let adjY = -1; adjY < 2; adjY++){
         //the following is used to find the index value of the adjacent cells of [y][x]
-        let x = this.x/this.size + adjX;
-        let y = this.y/this.size + adjY;
+        let x = Math.round(this.x/this.size + adjX);
+        let y = Math.round(this.y/this.size + adjY);
 
         //sanity check
         if (x > -1 && x < GRID_SIZE && y > -1 && y < GRID_SIZE) {
