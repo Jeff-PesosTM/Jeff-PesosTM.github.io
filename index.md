@@ -13,6 +13,7 @@
 - [game of life](game-of-life)
 - [rectangle grid](rectangle-grid)
 - [character grid](character-grid)
+- [firework demo](firework-demo)
 
 
 ## projects
