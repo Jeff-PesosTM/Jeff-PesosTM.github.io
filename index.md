@@ -15,6 +15,7 @@
 - [character grid](character-grid)
 - [firework demo](firework-demo)
 - [collide demo](collide-demo)
+- [local storage demo](local-demo)
 
 
 ## projects
