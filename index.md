@@ -16,6 +16,7 @@
 - [firework demo](firework-demo)
 - [collide demo](collide-demo)
 - [local storage demo](local-demo)
+- [inheritance demo](inheritance-demo)
 
 
 ## projects
