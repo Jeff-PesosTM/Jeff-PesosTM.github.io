@@ -17,6 +17,7 @@
 - [collide demo](collide-demo)
 - [local storage demo](local-demo)
 - [inheritance demo](inheritance-demo)
+- [recursion demo fractal circles](fractal-circle)
 
 
 ## projects
