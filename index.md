@@ -18,6 +18,7 @@
 - [local storage demo](local-demo)
 - [inheritance demo](inheritance-demo)
 - [recursion demo fractal circles](fractal-circle)
+- [recursion demo serpenski](serpinski)
 
 
 ## projects
